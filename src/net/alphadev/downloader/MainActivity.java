@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.*;
 
 public class MainActivity extends Activity {
     /** Called when the activity is first created. */
@@ -46,11 +47,16 @@ public class MainActivity extends Activity {
 		final Uri uri = Uri.parse(urlText.getText().toString());
 		final String filename = uri.getLastPathSegment();
 		try {
-			return new DownloadManager.Request(uri)
+			DownloadManager.Request request = new DownloadManager.Request(uri)
 				.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 				.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
-				.setAllowedOverRoaming(false)
-				.setAllowedOverMetered(true);
+				.setAllowedOverRoaming(false);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+				request.setAllowedOverMetered(true);
+			}
+
+			return request;
 		} catch (IllegalArgumentException ex) {
 			Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
 			return null;
