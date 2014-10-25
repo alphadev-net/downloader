@@ -20,8 +20,8 @@ android {
     defaultConfig {
         applicationId "net.alphadev.downloader"
         minSdkVersion 9
-        targetSdkVersion 19
         versionCode 4
+        targetSdkVersion 21
         versionName "1.2"
     }
 
