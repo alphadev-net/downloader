@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         final String filename = uri.getLastPathSegment();
 
         if (filename == null) {
-            Toast.makeText(this, "Are you sure you got the URL right? This is not a scraper!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_filename, Toast.LENGTH_SHORT).show();
             return null;
         }
 

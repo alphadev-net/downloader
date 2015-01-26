@@ -4,4 +4,6 @@
     <string name="download">Download</string>
     <string name="app_name">Downloader</string>
 
+    <string name="no_filename">Are you sure you got the URL right? This is not a scraper!</string>
+
 </resources>
