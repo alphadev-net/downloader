@@ -17,6 +17,7 @@ package net.alphadev.downloader;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.app.DownloadManager.Request;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,35 +30,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+    private DownloadManager dlManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        dlManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
         final TextView urlText = (TextView) findViewById(R.id.url_text);
         final View downloadButton = findViewById(R.id.download_button);
         downloadButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View p1) {
-                final DownloadManager.Request req = getRequest(urlText);
-                download(req);
+                final Request request = getRequest(urlText);
+                if (request != null) {
+                    dlManager.enqueue(request);
+                }
             }
         });
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent != null) {
             urlText.setText(intent.getDataString());
         }
     }
 
-    private void download(DownloadManager.Request request) {
-        if (request != null) {
-            final DownloadManager dlManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-            dlManager.enqueue(request);
-        }
-    }
-
-    private DownloadManager.Request getRequest(TextView urlText) {
+    private Request getRequest(TextView urlText) {
         final Uri uri = Uri.parse(urlText.getText().toString());
         final String filename = uri.getLastPathSegment();
 
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
         }
 
         try {
-            DownloadManager.Request request = new DownloadManager.Request(uri)
+            final Request request = new Request(uri)
                     .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
                     .setAllowedOverRoaming(false);
 
